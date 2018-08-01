@@ -64,19 +64,6 @@ public class MainActivity extends Activity {
 
                     MainActivity.this.startActivity(intent);
 
-
-                    Log.d(TAG, "File Uri: " + uri.toString());
-                    // Get the path
-                    String path = null;
-                    try {
-                        path = FileUtils.getPath(this, uri);
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
-                    Log.d(TAG, "File Path: " + path);
-                    // Get the file instance
-                    // File file = new File(path);
-                    // Initiate the upload
                 }
                 break;
         }

@@ -80,6 +80,11 @@ public class ReaderActivity extends AppCompatActivity {
 
         }
 
+        Uri uri = (Uri) intent.getData();
+        if (uri != null) {
+            mMarkdownView.loadMarkdownFromUrl(uri.toString());
+        }
+
 
 
 
