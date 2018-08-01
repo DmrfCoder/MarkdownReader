@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="cn.dmrfcoder.markdownreader.app.MainActivity">
+    android:orientation="vertical">
 
-    <cn.dmrfcoder.markdownreader.MarkdownView
-        android:id="@+id/mark_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:escapeHtml="false" />
+    <Button
+        android:id="@+id/open_sd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="打开" />
+
+
 </LinearLayout>

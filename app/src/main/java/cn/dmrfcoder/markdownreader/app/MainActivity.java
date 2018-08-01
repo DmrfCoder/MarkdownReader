@@ -1,102 +1,87 @@
 package cn.dmrfcoder.markdownreader.app;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
-import cn.dmrfcoder.markdownreader.MarkdownView;
-import cn.dmrfcoder.markdownreader.css.InternalStyleSheet;
-import cn.dmrfcoder.markdownreader.css.styles.Github;
+import java.net.URISyntaxException;
 
-public class MainActivity extends AppCompatActivity {
-
-    private MarkdownView mMarkdownView;
-    private InternalStyleSheet mStyle = new Github();
+public class MainActivity extends Activity {
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.change_theme_action:
-                break;
-        }
-
-        return true;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Cria o bean.
-        MyBean myBean = new MyBean();
-        myBean.setHello("Olá");
-        myBean.setDiasDaSemana(MyBean.DiasDaSemana.DOMINGO);
+        Button choosefile = findViewById(R.id.open_sd);
+        choosefile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showFileChooser();
+            }
+        });
 
-        mMarkdownView = findViewById(R.id.mark_view);
-        mMarkdownView.addStyleSheet(mStyle);
-        //http://stackoverflow.com/questions/6370690/media-queries-how-to-target-desktop-tablet-and-mobile
-        mStyle.addMedia("screen and (min-width: 320px)");
-        mStyle.addRule("h1", "color: green");
-        mStyle.endMedia();
-        mStyle.addMedia("screen and (min-width: 481px)");
-        mStyle.addRule("h1", "color: red");
-        mStyle.endMedia();
-        mStyle.addMedia("screen and (min-width: 641px)");
-        mStyle.addRule("h1", "color: blue");
-        mStyle.endMedia();
-        mStyle.addMedia("screen and (min-width: 961px)");
-        mStyle.addRule("h1", "color: yellow");
-        mStyle.endMedia();
-        mStyle.addMedia("screen and (min-width: 1025px)");
-        mStyle.addRule("h1", "color: gray");
-        mStyle.endMedia();
-        mStyle.addMedia("screen and (min-width: 1281px)");
-        mStyle.addRule("h1", "color: orange");
-        mStyle.endMedia();
-        mMarkdownView.setBean(myBean);
-
-
-
-        mMarkdownView.loadMarkdownFromAsset("What.md");
     }
 
-    public static class MyBean {
+    private static final int FILE_SELECT_CODE = 0;
 
-        public enum DiasDaSemana {
-            DOMINGO,
-            SEGUNDA,
-            TERCA,
-            QUARTA,
-            QUINTA,
-            SEXTA,
-            SABADO
-        }
-
-        private String hello;
-        private DiasDaSemana diasDaSemana;
-
-        public String getHello() {
-            return hello;
-        }
-
-        public void setHello(String hello) {
-            this.hello = hello;
-        }
-
-        public DiasDaSemana getDiasDaSemana() {
-            return diasDaSemana;
-        }
-
-        public void setDiasDaSemana(DiasDaSemana diasDaSemana) {
-            this.diasDaSemana = diasDaSemana;
+    private void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+    private static final String TAG = "ChooseFile";
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+                    // Get the Uri of the selected file
+                    Uri uri = data.getData();
+
+                    String p=FileUtils.getpath(this,uri);
+
+                    Intent intent=new Intent(MainActivity.this,ReaderActivity.class);
+                    intent.putExtra("path",p);
+
+                    MainActivity.this.startActivity(intent);
+
+
+                    Log.d(TAG, "File Uri: " + uri.toString());
+                    // Get the path
+                    String path = null;
+                    try {
+                        path = FileUtils.getPath(this, uri);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d(TAG, "File Path: " + path);
+                    // Get the file instance
+                    // File file = new File(path);
+                    // Initiate the upload
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
 }
