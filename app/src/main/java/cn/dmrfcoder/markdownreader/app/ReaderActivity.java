@@ -1,5 +1,6 @@
 package cn.dmrfcoder.markdownreader.app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,26 +14,12 @@ import cn.dmrfcoder.markdownreader.MarkdownView;
 import cn.dmrfcoder.markdownreader.css.InternalStyleSheet;
 import cn.dmrfcoder.markdownreader.css.styles.Github;
 
-public class ReaderActivity extends AppCompatActivity {
+public class ReaderActivity extends Activity {
 
     private MarkdownView mMarkdownView;
     private InternalStyleSheet mStyle = new Github();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.change_theme_action:
-                break;
-        }
-
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
