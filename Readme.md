@@ -38,6 +38,10 @@
 -  Custom Attributes `{ #id .class name=value name='value'}`
 -  Text Align, Text Size and Text Colors using Custom Attributes
 
+# 截图
+
+![](https://lh3.googleusercontent.com/U6sQsllqW1Tq-6T_PXgKKkglh-8dsxlMr2LjSHKyYV7IBtcn8jVB4_acBEJPAFexIGuvVFSs=w219-h437-no)
+
  ## 运行环境：
 
 android device
